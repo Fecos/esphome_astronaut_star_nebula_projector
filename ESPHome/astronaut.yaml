@@ -1,0 +1,246 @@
+substitutions:
+  name: <Írd át a saját azonosítódra>
+  friendly_name: <Írd át a saját megnevezésedre>
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+
+esp32:
+  board: wemos_d1_mini32
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+  level: DEBUG
+#  level: INFO
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret api_password
+
+ota:
+  password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  power_save_mode: none
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "${name} AP"
+    password: !secret wifi_fallback_password
+
+captive_portal:
+
+# Opcionális!
+#
+dallas:
+  - pin: GPIO18
+#
+
+light:
+  - platform: rgb
+    name: ${name}_nebula
+    id: rgb_light
+    red: red
+    green: green
+    blue: blue
+    effects:
+      - flicker:
+          name: Flicker
+          alpha: 95%
+          intensity: 2.5%
+      - random:
+          name: Random
+          transition_length: 2.5s
+          update_interval: 3s
+      - random:
+          name: Random Slow
+          transition_length: 10s
+          update_interval: 5s
+      - pulse:
+      - strobe:
+
+
+# Opcionális!
+#
+  - platform: neopixelbus
+    type: GRB
+    variant: WS2812
+    pin: GPIO19
+    num_leds: 16
+    name: ${name}_neopixel
+    effects:
+      - addressable_rainbow:
+      - addressable_color_wipe:
+      - addressable_twinkle:
+      - addressable_random_twinkle:
+#
+
+  - platform: monochromatic
+    name: ${name}_laser
+    id: laser
+    output: laser_pwm
+
+  - platform: monochromatic
+    name: ${name}_sLED_blue"
+    id: status_led_blue
+    output: led_blue
+
+  - platform: monochromatic
+    name: ${name}_sLED_red"
+    id: status_led_red
+    output: led_red
+
+  - platform: monochromatic
+    name: ${name}_sLED_esp32"
+    id: status_led_esp32
+    output: led_esp32
+
+fan:
+  platform: speed
+  name: ${name}_motor
+  id: motor
+  output: motor_pwm
+  restore_mode: ALWAYS_OFF
+
+output:
+  - platform: ledc
+    id: red
+    pin: GPIO21
+
+  - platform: ledc
+    id: green
+    pin: GPIO16
+
+  - platform: ledc
+    id: blue
+    pin: GPIO17
+
+  - platform: ledc
+    id: laser_pwm
+    pin: GPIO4
+
+  - platform: ledc
+    id: motor_pwm
+    pin: GPIO22
+
+  - platform: ledc
+    id: led_blue
+    pin:
+      number: GPIO27
+      mode: OUTPUT
+      inverted: true
+
+  - platform: ledc
+    id: led_red
+    pin:
+      number: GPIO32
+      mode: OUTPUT
+      inverted: true
+
+  - platform: ledc
+    id: led_esp32
+    pin:
+      number: GPIO2
+      mode: OUTPUT
+      inverted: false
+
+
+binary_sensor:
+  - platform: status
+    name: ${name}_status
+
+  - platform: gpio
+    name: ${name}_button_on-off"
+    id: button_on_off
+    pin:
+      number: GPIO23
+      mode:
+        input: true
+      inverted: true
+
+  - platform: gpio
+    name: ${name}_button_nebula
+    id: button_nebula
+    pin:
+      number: GPIO34
+      mode:
+        input: true
+      inverted: true
+
+  - platform: gpio
+    name: ${name}_button_star
+    id: button_star
+    pin:
+      number: GPIO35
+      mode:
+        input: true
+      inverted: true
+
+switch:
+  - platform: restart
+    name: ${name}_restart
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: ${name}_wifi_ip
+      update_interval: 30min
+    ssid:
+      name: ${name}_wifi_ssid
+      update_interval: 30min
+
+sensor:
+  - platform: wifi_signal
+    name: ${name}_wifi_signal
+    id: wifi_signal_db
+    update_interval: 5min
+    entity_category: "diagnostic"
+
+  - platform: copy
+    source_id: wifi_signal_db
+    name: ${name}_wifi_signal_percent
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "Signal %"
+    entity_category: "diagnostic"
+
+  - platform: internal_temperature
+    name: ${name}_cpu_temp
+    update_interval: 10min
+
+# Opcionális!
+# Indításkor ki fogja írni a csatlakoztatott szenzor címét, azt kll az "address" részhez bemásolni és aktiválható a szenzor
+#
+#  - platform: dallas
+#    address: 0x0
+#    name: ${name}_int_temp
+
+remote_receiver:
+  pin:
+    number: GPIO33
+    inverted: true
+    mode:
+        input: true
+  dump: nec
+  on_nec:
+    then:
+    - if:
+        condition:
+          and:
+            - lambda: 'return (x.address == 0xFF00);'
+            - lambda: 'return (x.command == 0xBB44);'
+        then:
+          - light.toggle: rgb_light
+    - if:
+        condition:
+          and:
+            - lambda: 'return (x.address == 0xFF00);'
+            - lambda: 'return (x.command == 0x00FF);'
+        then:
+          - light.toggle: laser
