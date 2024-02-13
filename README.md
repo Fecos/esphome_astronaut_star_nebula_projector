@@ -21,15 +21,20 @@ Az űrhajós gyárilag nem rendelkezik a távirányítón kívül semmilyen inte
 
 ### Szétszerelés
 A hátizsákon 4 kupak alatt találhatóak meg a csavarok. A kupakok eltávolítása kicsit nehézkes. Én kilyukasztottam, és úgy húztam ki. \(Ha bárki talál rá kevésbé destruktív megoldást, akkor jelezze! 😊\) 
-[![Opening backpack](images/thumbnails/img2_thumb.jpg)](images/img2.jpg) [![Opening backpack](images/thumbnails/img3_thumb.jpg)](images/img3.jpg)
 
-3 csatlakozó eltávolításával kiszabadítható a nyák:
+[![Opening backpack](images/thumbnails/img2_thumb.jpg)](images/img2.jpg)
+[![Opening backpack](images/thumbnails/img3_thumb.jpg)](images/img3.jpg)
+
+3 csatlakozó eltávolításával kiszabadítható a NYÁK:
+
 [![Removing connectors](images/thumbnails/img4_thumb.jpg)](images/img4.jpg)
 
 ### Mikrokontroller eltávolítása
 Az ötletet adó kivetítőhöz hasonlóan ezen a NYÁK-on is egy kis mikrokontroller van, ami 3.3V-tal működik.
 Eltávolításához forrólevegős, vagy hagyományos forrasztópáka szükséges.
-[![Removing MCU](images/thumbnails/img5_thumb.jpg)](images/img5.jpg) [![Removing MCU](images/thumbnails/img6_thumb.jpg)](images/img6.jpg)
+
+[![Removing MCU](images/thumbnails/img5_thumb.jpg)](images/img5.jpg)
+[![Removing MCU](images/thumbnails/img6_thumb.jpg)](images/img6.jpg)
 
 ### Lábkiosztás
 Jöhetett a keresés, mi hova van kivezetve. Mivel XYZ típusú N-Channel MOSFET-tel van vezérelve minden, így egyszerűbb feladat volt visszakeresni: Source->GND, Gate->MCU, Drain->Load->VCC.
@@ -51,16 +56,19 @@ Kiméregetve a csatlakozók alapján a lábkiosztás:
 
 [![Astronaut ESP12](images/thumbnails/img7_thumb.jpg)](images/img7.jpg)
 
-[![Wemos MINI D1 ESP32](images/thumbnails/img8_thumb.jpg)](images/img8.jpg) [![Wemos MINI D1 ESP32](images/thumbnails/img9_thumb.jpg)](images/img9.jpg)
+[![Wemos MINI D1 ESP32](images/thumbnails/img8_thumb.jpg)](images/img8.jpg)
+[![Wemos MINI D1 ESP32](images/thumbnails/img9_thumb.jpg)](images/img9.jpg)
 
 7.5cm hosszú (0.22mm2) vezetékeket forrasztottam az eredeti mikrokontroller csatlakozási helyeire.
 
-[![Wemos MINI D1 ESP32 to PCB](images/thumbnails/img11_thumb.jpg)](images/img11.jpg) [![Wemos MINI D1 ESP32 to PCB](images/thumbnails/img12_thumb.jpg)](images/img12.jpg)
+[![Wemos MINI D1 ESP32 to PCB](images/thumbnails/img11_thumb.jpg)](images/img11.jpg)
+[![Wemos MINI D1 ESP32 to PCB](images/thumbnails/img12_thumb.jpg)](images/img12.jpg)
 
 ### Tápegység
 Az űrhajós 5V-os USB adapterről működik és bár van rajta 3.3V-os stabilizátor, nem terveztem használni, mindent direktben a betáp csatlakozóra közöttem. A kábelek 7.5cm, illetve 12.5cm hosszúak (0.5mm2).
 
-[![Power](images/thumbnails/img13_thumb.jpg)](images/img13.jpg) [![Power](images/thumbnails/img14_thumb.jpg)](images/img14.jpg)
+[![Power](images/thumbnails/img13_thumb.jpg)](images/img13.jpg)
+[![Power](images/thumbnails/img14_thumb.jpg)](images/img14.jpg)
 
 **A műtét után az űrhajóshoz legalább 2A-es tápegység kell!**
 
@@ -69,16 +77,23 @@ A mellékelt ESPHome kód tartalmaz némi extrát, amit az alábbiak szerint kö
 
 **LED \"tábla\" az űrhajós testének, illetve műszereinek megvilágítására**
 - GPIO19 -> LED_IN
-[![Digital LED](images/thumbnails/img15_thumb.jpg)](images/img15.jpg) [![Digital LED](images/thumbnails/img16_thumb.jpg)](images/img16.jpg)
+
+[![Digital LED](images/thumbnails/img15_thumb.jpg)](images/img15.jpg)
+[![Digital LED](images/thumbnails/img16_thumb.jpg)](images/img16.jpg)
 
 **Dallas DS18B20 hőmérséklet mérő az úrhajós belső hőmérsékletének méréséhez**
 \(Azért terveztem bele, mert az ESP32 belső hőmérséklete 50C feletti értékeket mutatott és nem tudtam, hogy mennyire fog átmelegedni az egész. A tapasztalat azt mutatja, hogy nem létkérdés, kb. szobahőmérséklet van a testében is.\)
 - DATA -> GPIO18
 - **Vcc -> 3.3V\(!\)**
 - Vcc és GPIO18 közé kell egy 4K7 felhúzó ellenállás
-[![Dallas DS18B20](images/thumbnails/img17_thumb.jpg)](images/img17.jpg) [![Dallas DS18B20](images/thumbnails/img18_thumb.jpg)](images/img18.jpg) [![Dallas DS18B20](images/thumbnails/img19_thumb.jpg)](images/img19.jpg) [![Dallas DS18B20](images/thumbnails/img20_thumb.jpg)](images/img20.jpg)
+
+[![Dallas DS18B20](images/thumbnails/img17_thumb.jpg)](images/img17.jpg)
+[![Dallas DS18B20](images/thumbnails/img18_thumb.jpg)](images/img18.jpg)
+[![Dallas DS18B20](images/thumbnails/img19_thumb.jpg)](images/img19.jpg)
+[![Dallas DS18B20](images/thumbnails/img20_thumb.jpg)](images/img20.jpg)
 
 Együtt az extrák
+
 [![Dallas + Digital LED](images/thumbnails/img21_thumb.jpg)](images/img21.jpg)
 
 ### Forrasztás!
@@ -104,7 +119,11 @@ Az alábbiak szerint kötöttem össze a két NYÁK-ot:
 | 16         | GPIO35     | Nyomógomb - Csillagok
 
 Ezt a fázist elég nehéz volt fotózni - fogynak a szabadon lévő kábelek:
-[![Soldering](images/thumbnails/img22_thumb.jpg)](images/img22.jpg) [![Soldering](images/thumbnails/img23_thumb.jpg)](images/img23.jpg) [![Soldering](images/thumbnails/img24_thumb.jpg)](images/img24.jpg) [![Soldering](images/thumbnails/img25_thumb.jpg)](images/img25.jpg)
+
+[![Soldering](images/thumbnails/img22_thumb.jpg)](images/img22.jpg)
+[![Soldering](images/thumbnails/img23_thumb.jpg)](images/img23.jpg)
+[![Soldering](images/thumbnails/img24_thumb.jpg)](images/img24.jpg)
+[![Soldering](images/thumbnails/img25_thumb.jpg)](images/img25.jpg)
 
 ### Power LED
 A Wemos MINI-n gyárilag van egy LED, ami folyamatosan világít, jelezve, hogy van tápfeszültség. Ezt érdemes leszedni, mert átvilágít az űrhajós testén.
@@ -114,19 +133,23 @@ A Wemos MINI-n gyárilag van egy LED, ami folyamatosan világít, jelezve, hogy 
 ### LED panel rögzítése
 Kétoldalas ragasztóval oldottam meg a LED panel rögzítését, és hogy legyen hely közöttük, 3 réteget ragasztottam egymásra. A panelt úgy pozícionáltam, hogy ne takarja az antennát.
 
-[![LED panel](images/thumbnails/img27_thumb.jpg)](images/img27.jpg) [![LED panel](images/thumbnails/img28_thumb.jpg)](images/img28.jpg)
+[![LED panel](images/thumbnails/img27_thumb.jpg)](images/img27.jpg)
+[![LED panel](images/thumbnails/img28_thumb.jpg)](images/img28.jpg)
 
 ### Végszerelés, összeállítás
 Multiméterrel ellenőriztem a forrasztásokat, majd az eredeti mikrokontrollernél ragasztóval \(glue gun\) rögzítettem a kábeleket.
 Kábelkötegelővel szépen össze lehet fogni az egészet és valami ilyesmi lesz a végeredmény:
 
-[![Final assembly](images/thumbnails/img29_thumb.jpg)](images/img29.jpg) [![Final assembly](images/thumbnails/img30_thumb.jpg)](images/img30.jpg) [![Final assembly](images/thumbnails/img31_thumb.jpg)](images/img31.jpg) [![Final assembly](images/thumbnails/img32_thumb.jpg)](images/img32.jpg)
-
+[![Final assembly](images/thumbnails/img29_thumb.jpg)](images/img29.jpg)
+[![Final assembly](images/thumbnails/img30_thumb.jpg)](images/img30.jpg)
+[![Final assembly](images/thumbnails/img31_thumb.jpg)](images/img31.jpg)
+[![Final assembly](images/thumbnails/img32_thumb.jpg)](images/img32.jpg)
 
 ### Hibajavítás
 Összeszerelés és a fotók visszanézése közben észrevettem, hogy nem teljesen egyforma a 3 űrhajós panelja, hiába stimmel a verziója. Az R15 és az R16 ellenállások hiányoznak kettőről, ami a 3.3V felhúzó ellenállások lennének a csillagköd és a csillagok nyomógomboknál. SMD-t és főleg ilyen picit sajnos nem tudnék normálisan felforrasztani, ezért maradt a \"B\" terv: 10K-s ellenállást forrasztottam a mikrokapcsolók lábaira, a másik felét pedig 3.3V-ra kötöttem.
 
-[![Button pull-up](images/thumbnails/img33_thumb.jpg)](images/img33.jpg) [![Button pull-up](images/thumbnails/img34_thumb.jpg)](images/img34.jpg)
+[![Button pull-up](images/thumbnails/img33_thumb.jpg)](images/img33.jpg)
+[![Button pull-up](images/thumbnails/img34_thumb.jpg)](images/img34.jpg)
 
 ## Program feltöltése
 
@@ -163,31 +186,37 @@ Feltöltés után Home Assistant-ban értesítés fog megjelenni, hogy új eszk�
 
 Még szétszedett állapotban érdemes tesztelni, hogy minden funkció működik-e rendesen, ehhez csak vissza kell dugni a fejből jövő 3 csatlakozót a NYÁK-ra.
 
-[![Testing](images/thumbnails/img36_thumb.jpg)](images/img36.jpg) [![Testing](images/thumbnails/img37_thumb.jpg)](images/img37.jpg)
+[![Testing](images/thumbnails/img36_thumb.jpg)](images/img36.jpg)
+[![Testing](images/thumbnails/img37_thumb.jpg)](images/img37.jpg)
 
 ## Összeszerelés
 Az eredeti \"hátizsákban\" alig van hely, így ez nem is volt opció, hogy ide próbáljam meg bezsúfolni az egészet. 35mm átmérőjű körkivágóval 2db egymásba érő lyukat vágtam, ügyelve arra, hogy a rögzítési pontokat ne fúrjam el. Így megfelelően nagy nyílás lett a \"hátán\", hogy könnyedén össze lehessen rakni.
 A fúrásnál célszerű lassan és óvatosan haladni, mert a hátizsák merevebb műanyagból van, az űrhajós teste viszont puha. Fúrás előtt ellenőrizd, hogy hova fog esni a kivágás!
 Az alábbi képeken látható is, hogy az alsó lyuk kicsit elcsúszott jobbra és épphogy nem nyílt szét az illesztés.
 
-[![Drill check](images/thumbnails/img38_thumb.jpg)](images/img38.jpg) [![Drill check](images/thumbnails/img39_thumb.jpg)](images/img39.jpg)
+[![Drill check](images/thumbnails/img38_thumb.jpg)](images/img38.jpg)
+[![Drill check](images/thumbnails/img39_thumb.jpg)](images/img39.jpg)
 
 Fúrás után katasztrófálisan nézett ki nálam mindegyik. Sorjázóval és szikével szépen le lehet takarítani.
 
-[![Drill cleanup](images/thumbnails/img40_thumb.jpg)](images/img40.jpg) [![Drill cleanup](images/thumbnails/img41_thumb.jpg)](images/img41.jpg)
+[![Drill cleanup](images/thumbnails/img40_thumb.jpg)](images/img40.jpg)
+[![Drill cleanup](images/thumbnails/img41_thumb.jpg)](images/img41.jpg)
 
 A mágnesek, amik a fejet tartják, elég gyengén vannak beragasztva, ezt érdemes orvosolni egy kis ragasztóval. Ha \"glue gun\"-t használsz, akkor egyszerre csak egy mágnesre nyomj ragasztót és támaszd meg, mert a hő feloldja a rajta lévő ragasztót és kiugrik a helyéről. Én elsőre sajnos úgy jártam, hogy kiugrott mindkét mágnes, és egy szép kis ragasztó csomóvá állt össze az egész.
 
-[![Magnet fix](images/thumbnails/img42_thumb.jpg)](images/img42.jpg) [![Magnet fix](images/thumbnails/img43_thumb.jpg)](images/img43.jpg)
+[![Magnet fix](images/thumbnails/img42_thumb.jpg)](images/img42.jpg)
+[![Magnet fix](images/thumbnails/img43_thumb.jpg)](images/img43.jpg)
 
 Ha idáig eljutottál és nincsenek égési sérüléseid, akkor lehet összeszerelni.
 Az eredeti NYÁK-ot vissza kell csavarozni a hátizsák hátsó felére, és a fej kábeleit el kell rendezni, hogy a megfelelő helyen \(a kivezetésnél\) legyen.
 
-[![Assembly](images/thumbnails/img44_thumb.jpg)](images/img44.jpg) [![Assembly](images/thumbnails/img45_thumb.jpg)](images/img45.jpg)
+[![Assembly](images/thumbnails/img44_thumb.jpg)](images/img44.jpg)
+[![Assembly](images/thumbnails/img45_thumb.jpg)](images/img45.jpg)
 
 A hátizsák műanyag eleménél fogva - és egy kicsit oldalra döntve - összeállítható az egész. Arra érdemes figyelni, hogy a LED panel a lehető leginkább felfelé \(a mágnesek felé\) legyen.
 
-[![Assembly](images/thumbnails/img46_thumb.jpg)](images/img46.jpg) [![Assembly](images/thumbnails/img47_thumb.jpg)](images/img47.jpg)
+[![Assembly](images/thumbnails/img46_thumb.jpg)](images/img46.jpg)
+[![Assembly](images/thumbnails/img47_thumb.jpg)](images/img47.jpg)
 
 
 ## TODO
