@@ -1,6 +1,6 @@
 substitutions:
-  name: <Írd át a saját azonosítódra>
-  friendly_name: <Írd át a saját megnevezésedre>
+  name: <NAME>
+  friendly_name: <FRIENDLY NAME>
 
 esphome:
   name: ${name}
@@ -36,7 +36,24 @@ wifi:
 
 captive_portal:
 
-# Opcionális!
+# Global variables
+globals:
+  - id: global_laser_pwm_preset
+    type: int
+    restore_value: no
+    initial_value: '1'
+
+  - id: global_laser_pulse_mode
+    type: int
+    restore_value: no
+    initial_value: '0'
+
+  - id: global_nebula_preset
+    type: int
+    restore_value: no
+    initial_value: '1'
+
+# OPTIONAL - for internal temperature measurement!
 #
 dallas:
   - pin: GPIO18
@@ -66,7 +83,7 @@ light:
       - strobe:
 
 
-# Opcionális!
+# OPTIONAL - body lights
 #
   - platform: neopixelbus
     type: GRB
@@ -124,9 +141,11 @@ output:
   - platform: ledc
     id: laser_pwm
     pin: GPIO4
+    frequency: 1000 Hz
 
   - platform: ledc
     id: motor_pwm
+    frequency: 1000 Hz
     pin: GPIO22
 
   - platform: ledc
@@ -172,6 +191,11 @@ binary_sensor:
       mode:
         input: true
       inverted: true
+    filters:
+      - delayed_on_off: 50ms
+    on_release:
+      then:
+        - script.execute: cycle_nebula_colors
 
   - platform: gpio
     name: ${name}_button_star
@@ -181,10 +205,57 @@ binary_sensor:
       mode:
         input: true
       inverted: true
+    filters:
+      - delayed_on_off: 50ms
+    on_release:
+      then:
+        - lambda: |-
+            if (id(global_laser_pwm_preset) == 0) {
+              id(laser).turn_off();  // Off state
+              id(global_laser_pwm_preset) = 1;
+            } else if (id(global_laser_pwm_preset) == 1) {
+              auto call = id(laser).turn_on();
+              call.set_brightness(0.60);  // Level 1
+              call.perform();
+              id(global_laser_pwm_preset) = 2;
+            } else if (id(global_laser_pwm_preset) == 2) {
+              auto call = id(laser).turn_on();
+              call.set_brightness(0.68);  // Level 2
+              call.perform();
+              id(global_laser_pwm_preset) = 3;
+            } else if (id(global_laser_pwm_preset) == 3) {
+              auto call = id(laser).turn_on();
+              call.set_brightness(0.68);  // Level 3
+              call.perform();
+              id(global_laser_pwm_preset) = 4;
+            } else if (id(global_laser_pwm_preset) == 4) {
+              auto call = id(laser).turn_on();
+              call.set_brightness(0.85);  // Level 4
+              call.perform();
+              id(global_laser_pwm_preset) = 0;
+            }
 
 switch:
   - platform: restart
     name: ${name}_restart
+
+  - platform: template
+    name: "Laser - Breathing"
+    id: sw_pulse_laser
+    optimistic: true
+    turn_on_action:
+      - lambda: 'id(global_laser_pulse_mode) = 1;'
+    turn_off_action:
+      - lambda: 'id(global_laser_pulse_mode) = 0;'
+      - light.turn_off:
+          id: laser
+          transition_length: 1s
+    lambda: |-  # This lambda function reports the state of the switch
+      if (id(global_laser_pulse_mode) == 1) {
+        return true;  // The switch is ON
+      } else {
+        return false;  // The switch is OFF
+      }
 
 text_sensor:
   - platform: wifi_info
@@ -214,8 +285,8 @@ sensor:
     name: ${name}_cpu_temp
     update_interval: 10min
 
-# Opcionális!
-# Indításkor ki fogja írni a csatlakoztatott szenzor címét, azt kll az "address" részhez bemásolni és aktiválható a szenzor
+# OPTIONAL
+# At boot, it will print the address of the connected sensor, copy it to the "address" section and activate (uncomment) the sensor
 #
 #  - platform: dallas
 #    address: 0x0
@@ -236,11 +307,118 @@ remote_receiver:
             - lambda: 'return (x.address == 0xFF00);'
             - lambda: 'return (x.command == 0xBB44);'
         then:
-          - light.toggle: rgb_light
+          - script.execute: cycle_nebula_colors
     - if:
         condition:
           and:
             - lambda: 'return (x.address == 0xFF00);'
             - lambda: 'return (x.command == 0x00FF);'
         then:
-          - light.toggle: laser
+          - script.execute: cycle_laser_presets
+
+script:
+  - id: cycle_nebula_colors
+    then:
+      - lambda: |-
+          if (id(global_nebula_preset) == 0) {
+            auto call = id(rgb_light).turn_off();
+            call.perform();
+            id(global_nebula_preset) = 1;
+          } else if (id(global_nebula_preset) == 1) {
+            auto call = id(rgb_light).turn_on();
+            call.set_brightness(0.60);  // Level 1
+            call.set_red(1.0);
+            call.set_green(0.0);
+            call.set_blue(0.0);
+            call.perform();
+            id(global_nebula_preset) = 2;
+          } else if (id(global_nebula_preset) == 2) {
+            auto call = id(rgb_light).turn_on();
+            call.set_brightness(0.60);  // Level 1
+            call.set_red(0.0);
+            call.set_green(1.0);
+            call.set_blue(0.0);
+            call.perform();
+            id(global_nebula_preset) = 3;
+          } else if (id(global_nebula_preset) == 3) {
+            auto call = id(rgb_light).turn_on();
+            call.set_brightness(0.60);  // Level 1
+            call.set_red(0.0);
+            call.set_green(0.0);
+            call.set_blue(1.0);
+            call.perform();
+            id(global_nebula_preset) = 4;
+          } else if (id(global_nebula_preset) == 4) {
+            auto call = id(rgb_light).turn_on();
+            call.set_brightness(0.60);  // Level 1
+            call.set_red(1.0);
+            call.set_green(0.0);
+            call.set_blue(1.0);
+            call.perform();
+            id(global_nebula_preset) = 5;
+          } else if (id(global_nebula_preset) == 5) {
+            auto call = id(rgb_light).turn_on();
+            call.set_brightness(0.60);  // Level 1
+            call.set_red(1.0);
+            call.set_green(1.0);
+            call.set_blue(0.0);
+            call.perform();
+            id(global_nebula_preset) = 6;
+          } else if (id(global_nebula_preset) == 6) {
+            auto call = id(rgb_light).turn_on();
+            call.set_brightness(0.60);  // Level 1
+            call.set_red(0.0);
+            call.set_blue(1.0);
+            call.set_green(1.0);
+            call.perform();
+            id(global_nebula_preset) = 0;
+          }
+
+  - id: cycle_laser_presets
+    then:
+      - lambda: |-
+          if (id(global_laser_pwm_preset) == 0) {
+            auto call = id(laser).turn_off();
+            call.perform();
+            id(global_laser_pwm_preset) = 1;
+          } else if (id(global_laser_pwm_preset) == 1) {
+            auto call = id(laser).turn_on();
+            call.set_brightness(0.60);  // Level 1
+            call.perform();
+            id(global_laser_pwm_preset) = 2;
+          } else if (id(global_laser_pwm_preset) == 2) {
+            auto call = id(laser).turn_on();
+            call.set_brightness(0.68);  // Level 2
+            call.perform();
+            id(global_laser_pwm_preset) = 3;
+          } else if (id(global_laser_pwm_preset) == 3) {
+            auto call = id(laser).turn_on();
+            call.set_brightness(0.68);  // Level 3
+            call.perform();
+            id(global_laser_pwm_preset) = 4;
+          } else if (id(global_laser_pwm_preset) == 4) {
+            auto call = id(laser).turn_on();
+            call.set_brightness(0.85);  // Level 4
+            call.perform();
+            id(global_laser_pwm_preset) = 0;
+          }
+
+interval:
+  - interval: 10s
+    then:
+      - if:
+          condition:
+            lambda: 'return id(global_laser_pulse_mode) == 1;'
+          then:
+            - if:
+                condition:
+                  light.is_on: laser
+                then:
+                  - light.turn_off:
+                      id: laser
+                      transition_length: 5s
+                else:
+                  - light.turn_on:
+                      id: laser
+                      brightness: 70%
+                      transition_length: 5s

@@ -2,9 +2,9 @@
 
 **English version coming soon!**
 
-[![Astronaut projector](images/thumbnails/img1_thumb.jpg)](images/img1.jpg)
+[![Astronaut projector](https://img.youtube.com/vi/9Ld8HXvxZIo/0.jpg)](https://www.youtube.com/watch?v=9Ld8HXvxZIo)
 
-***Ez az első ilyen formában közzétett projektem, ha bármilyen észrevételed lenne, akkor az építő jellegű javaslatokat szívesen veszem.***
+***Ez az első ilyen formában közzétett projektem, ha bármilyen észrevételed lenne, akkor az építő jellegű javaslatokat szívesen veszem. 😊***
 
 ## Az ötlet
 Az alap ötlet két projekt kombinációjából származik:
@@ -13,7 +13,7 @@ Az alap ötlet két projekt kombinációjából származik:
 
 ## Szituáció
 Gyerekeimnek rendeltünk 3db űrhajóst \(éjszakai fénynek\) és két esetet szerettem volna kezelni:
- - Sajnos (mint gondolom a gyerekek döntő többsége) rendszeresen elfelejtenek maguk után lekapcsolni minden világítást a szobájukban.
+ - Sajnos \(mint gondolom a gyerekek döntő többsége\) rendszeresen elfelejtenek maguk után lekapcsolni minden világítást a szobájukban.
  - A gyári távirányítóval beállítani a kedvenc színkombinációjukat elég nehézkes: ha bekapcsoltad és visszanyerted a látásod - mert 100% fényerővel égeti ki a retinád -, 10-20 gombnyomással már sikerül is.
 
 ## Okosítás
@@ -36,25 +36,29 @@ Eltávolításához forrólevegős, vagy hagyományos forrasztópáka szüksége
 [![Removing MCU](images/thumbnails/img5_thumb.jpg)](images/img5.jpg)
 [![Removing MCU](images/thumbnails/img6_thumb.jpg)](images/img6.jpg)
 
+[![Removing MCU](images/thumbnails/img6-2_thumb.jpg)](images/img6-2.jpg)
+
 ### Lábkiosztás
 Jöhetett a keresés, mi hova van kivezetve. Mivel XYZ típusú N-Channel MOSFET-tel van vezérelve minden, így egyszerűbb feladat volt visszakeresni: Source->GND, Gate->MCU, Drain->Load->VCC.
 
 Kiméregetve a csatlakozók alapján a lábkiosztás:
-| Szám | Funkció             | Szám | Funkció
-| -    | -                   | -    | -
-| 1    | Csillagköd - Kék    | 16   | Nyomógomb - Csillagok
-| 2    | Csillagköd - Piros  | 15   | Nyomógomb - Be/Ki
-| 3    | Csillagköd - Zöld   | 14   | Nyomógomb - Csillagköd
-| 4    |                     | 13   | 
-| 5    | Csillagköd - Motor  | 12   | Infravörös vevő
-| 6    | Státusz LED (piros) | 11   | Lézer
-| 7    | Státusz LED (kék)   | 10   | 
-| 8    |                     | 9    | 
+| Szám | Funkció                 | Szám | Funkció
+|-     | -                       | -    | - 
+| 1    |                         | 16   |
+| 2    |                         | 15   | Státusz LED (kék)
+| 3    | Lézer                   | 14   | Státusz LED (piros)
+| 4    | Infravörös vevő         | 13   | Csillagköd - Motor
+| 5    |                         | 12   | 
+| 6    | Nyomógomb - Csillagköd  | 11   | Csillagköd - Zöld
+| 7    | Nyomógomb - Be/Ki       | 10   | Csillagköd - Piros
+| 8    | Nyomógomb - Csillagok   | 9    | Csillagköd - Kék
 
 ### ESP32
 "Long story short" - megpróbáltam ESP12-vel is, de a relatív kevés felhasználható I/O port miatt I2C bővítő kellett, emiatt esett a választásom az ESP-WROOM-32 alapú lapkára \(Wemos MINI D1 ESP32 néven fut általában\).
 
 [![Astronaut ESP12](images/thumbnails/img7_thumb.jpg)](images/img7.jpg)
+
+Wemos MINI D1 ESP32 modul:
 
 [![Wemos MINI D1 ESP32](images/thumbnails/img8_thumb.jpg)](images/img8.jpg)
 [![Wemos MINI D1 ESP32](images/thumbnails/img9_thumb.jpg)](images/img9.jpg)
@@ -106,17 +110,17 @@ Az alábbiak szerint kötöttem össze a két NYÁK-ot:
 
 | Eredeti IC | Wemos Mini | Funkció
 | -          | -          | -
-| 1          | GPIO17     | Csillagköd - Kék
-| 2          | GPIO21     | Csillagköd - Piros
-| 3          | GPIO16     | Csillagköd - Zöld
-| 5          | GPIO22     | Csillagköd - Motor
-| 6          | GPIO32     | Státusz LED (piros)
-| 7          | GPIO27     | Státusz LED (kék)
-| 11         | GPIO4      | Lézer
-| 12         | GPIO33     | Infravörös vevő
-| 14         | GPIO34     | Nyomógomb - Csillagköd
-| 15         | GPIO23     | Nyomógomb - Be/Ki
-| 16         | GPIO35     | Nyomógomb - Csillagok
+| 3          | GPIO4      | Lézer
+| 4          | GPIO33     | Infravörös vevő
+| 6          | GPIO34     | Nyomógomb - Csillagköd
+| 7          | GPIO23     | Nyomógomb - Be/Ki
+| 8          | GPIO35     | Nyomógomb - Csillagok
+| 9          | GPIO17     | Csillagköd - Kék
+| 10         | GPIO21     | Csillagköd - Piros
+| 11         | GPIO16     | Csillagköd - Zöld
+| 13         | GPIO22     | Csillagköd - Motor
+| 14         | GPIO32     | Státusz LED (piros)
+| 15         | GPIO27     | Státusz LED (kék)
 
 Ezt a fázist elég nehéz volt fotózni - fogynak a szabadon lévő kábelek:
 
@@ -219,39 +223,33 @@ A hátizsák műanyag eleménél fogva - és egy kicsit oldalra döntve - össze
 [![Assembly](images/thumbnails/img47_thumb.jpg)](images/img47.jpg)
 
 
+[![Astronaut projector](images/thumbnails/img1_thumb.jpg)](images/img1.jpg)
+
+
 ## TODO
-AZ ESPHome konfiguráció nincs teljesen kész.
+AZ ESPHome konfiguráció nincs teljesen kész:
 
-### Kód optimalizálása
-Működik, használható, nem szép...
-
-### Effektek
-A csillagköd és a LED panel effektjeit még lehetne szépíteni.
-
-### Offline működés
-Utazások alkalmával vinni szoktuk magunkkal, elvileg a \"reboot_timeout\" lesz a megoldás.
-
-### Hátizsák gombok életre keltése
-Az eredetihez hasonló funkciókhoz még hiányoznak.
-
-### Távirányító gombok életre keltése
-Az eredetihez hasonló funkciókhoz még hiányoznak (minta van a kódban).
+- Kód optimalizálása \(működik, használható, nem szép...\)
+- Effektek \(a csillagköd és a LED panel effektjeit még lehetne szépíteni\)
+- Offline működés \(utazások alkalmával vinni szoktuk magunkkal, elvileg a \"reboot_timeout\" lesz a megoldás.\)
+- Hátizsák gombok életre keltése \(az eredetihez hasonló funkciókhoz még hiányoznak\)
+- Távirányító gombok életre keltése \(az eredetihez hasonló funkciókhoz még hiányoznak (minta van a kódban)\)
 
 **Távirányító kódok:**
 | Button name	| Address	| Command
-| -     | -  | -
-| Power	| 0xFF00	| 0xBA45
-| Timer	| 0xFF00	| 0xB847
-| Nebula	| 0xFF00	| 0xBB44 
-| Nebula B+	| 0xFF00	| 0xF609
-| Nebula B-	| 0xFF00	| 0xEA15 
-| Nebula S+	| 0xFF00	| 0xBC43 
-| Nebula S-	| 0xFF00	| 0xBF40
-| Star	| 0xFF00	| 0x00FF
-| Star S+	| 0xFF00	| 0xE619 
-| Star S-	| 0xFF00	| 0xB946 
-| Star B+	| 0xFF00	| 0xF20D
-| Star B-	| 0xFF00	| 0xF807 
+| -             | -         | -
+| Power	        | 0xFF00	| 0xBA45
+| Timer	        | 0xFF00	| 0xB847
+| Nebula	      | 0xFF00	| 0xBB44 
+| Nebula B+     | 0xFF00	| 0xF609
+| Nebula B-     | 0xFF00	| 0xEA15 
+| Nebula S+     | 0xFF00	| 0xBC43 
+| Nebula S-     | 0xFF00	| 0xBF40
+| Star          | 0xFF00	| 0x00FF
+| Star S+       | 0xFF00	| 0xE619 
+| Star S-       | 0xFF00	| 0xB946 
+| Star B+       | 0xFF00	| 0xF20D
+| Star B-       | 0xFF00	| 0xF807 
 
 ## Linkek
 
@@ -269,7 +267,12 @@ Tervezem még közzétenni más projektjeimet is, ahogy időm engedi:
 
 [GitHub](https://github.com/Fecos?tab=repositories) | [YouTube](https://www.youtube.com/channel/UCrv1oaToboV7-kN44UcGDXw)
 
-## Ha támogatnád a munkámat...
+## Ha támogatnád a munkám
 Ha hasznosnak találtad ezt a leírást, és köszönenet mondanál, akkor egy ☕, vagy egy 🍺 meghívást szívesen veszek.😊
 
 [![BMC](https://www.buymeacoffee.com/assets/img/custom_images/white_img.png)](https://www.buymeacoffee.com/fecos) [![PAYPAL](https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg)](https://www.paypal.com/donate/?business=NB972JNT9RSE4&no_recurring=1&currency_code=EUR)
+
+
+# ESPHome star and nebula projecting astronaut
+
+**English version coming soon!**
